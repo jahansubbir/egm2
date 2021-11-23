@@ -27,10 +27,10 @@ namespace EgmGenerator.DAL
                 //egm.DocumentNo = Reader["BOOKING NO"]?.ToString();
                 IdentificationSegment identificationSegment = new IdentificationSegment()
                 {
-                    VoyageNumber = Reader["Voy#No#"]?.ToString(),
-                    BolReference = Reader["BOOKING NO"]?.ToString(),
+                    VoyageNumber = Reader["Voyage_Number"]?.ToString(),
+                    BolReference = Reader["Bol_reference"]?.ToString(),
                     CustomsOffice = new CustomsOffice() { Code = "301", Name = "Custom House,Chittagong" },
-                    DateOfDeparture = (Reader["Sailed Dt#"] != DBNull.Value) ? Convert.ToDateTime(Reader["Sailed Dt#"]) : DateTime.MinValue
+                    DateOfDeparture = (Reader["Date_of_departure"] != DBNull.Value) ? Convert.ToDateTime(Reader["Date_of_departure"]) : DateTime.MinValue
                 };
                 egm.IdentificationSegment = identificationSegment;
 
@@ -47,12 +47,12 @@ namespace EgmGenerator.DAL
                     ConsigneeSegment = new ConsigneeSegment() { Name = Reader["CONSIGNEE"].ToString().Replace("&", "and") },
                     NotifySegment = new NotifySegment(),
                     PlaceOfLoadingSegment = new PlaceOfLoadingSegment() { Code = "BDCGP", Name = "Chittagong" },
-                    PackagesSegment = new PackagesSegment()
-                    {
-                        NumberOfPackages =(Reader["PKGS"]!=DBNull.Value)? Convert.ToInt32(Reader["PKGS"]):0,
-                        PackageTypeName = Reader["PKGCODE"].ToString(),
-                        PackageTypeCode = PackageTypeCodes.GetPackageTypes().FirstOrDefault(a => a.Name.ToLower().Trim() == Reader["PKGCODE"].ToString().ToLower().Trim())?.Code
-                    },
+                    //PackagesSegment = new PackagesSegment()
+                    //{
+                    //    NumberOfPackages =(Reader["PKGS"]!=DBNull.Value)? Convert.ToInt32(Reader["PKGS"]):0,
+                    //    PackageTypeName = Reader["PKGCODE"].ToString(),
+                    //    PackageTypeCode = PackageTypeCodes.GetPackageTypes().FirstOrDefault(a => a.Name.ToLower().Trim() == Reader["PKGCODE"].ToString().ToLower().Trim())?.Code
+                    //},
 
 
                 };
@@ -67,41 +67,41 @@ namespace EgmGenerator.DAL
                 bolSpecificSegment.BolTypeSegment = new BolTypeSegment() { Code = Reader["BL TYPE"].ToString() };
                 switch (bolSpecificSegment.BolTypeSegment.Code)
                 {
-                    case "HSB":
-                        bolSpecificSegment.BolTypeSegment.Name = "House Sea Bill";
-                        break;
+                    //case "HSB":
+                    //    bolSpecificSegment.BolTypeSegment.Name = "House Sea Bill";
+                    //    break;
                     case "MSB":
                         bolSpecificSegment.BolTypeSegment.Name = "Master Sea Bill";
                         break;
                 }
                 egm.BolSpecificSegment = bolSpecificSegment;
 
-                Containers containers = new Containers()
-                {
-                    Idt = Reader["CONTAINER"]?.ToString(),
+                //Containers containers = new Containers()
+                //{
+                //    Idt = Reader["CONTAINER"]?.ToString(),
 
-                };
+                //};
                 var containerData = new ContainerData();
 
-                containerData.Number = (Reader["PKGS"] != DBNull.Value) ? Convert.ToInt32(Reader["PKGS"]) : 0;
-                containerData.Identification = Reader["CONTAINER"]?.ToString();
-                containerData.Type = Reader["ISO"]?.ToString();
-                containerData.Seals = Reader["Seal"]?.ToString();
+                //containerData.Number = (Reader["PKGS"] != DBNull.Value) ? Convert.ToInt32(Reader["PKGS"]) : 0;
+                //containerData.Identification = Reader["CONTAINER"]?.ToString();
+                //containerData.Type = Reader["ISO"]?.ToString();
+                //containerData.Seals = Reader["Seal"]?.ToString();
                 containerData.Full = Reader["Status"]?.ToString();
                 containerData.SealingParty = Reader["Station"].ToString();
-                containerData.GoodsWeight = (Reader["CWeight"] != DBNull.Value) ? Convert.ToDouble(Reader["CWeight"]) : 0;
-                containers.ContainerData = containerData;
+                //containerData.GoodsWeight = (Reader["CWeight"] != DBNull.Value) ? Convert.ToDouble(Reader["CWeight"]) : 0;
+                //containers.ContainerData = containerData;
 
             //    egm.Containers = new List<Containers>();
             //    egm.Containers.Add(containers);
                 if (egmList.ContainsKey(identificationSegment.BolReference))
                 {
-                    egmList[identificationSegment.BolReference].Containers.Add(containers);
+                  //  egmList[identificationSegment.BolReference].Containers.Add(containers);
                 }
                 else
                 {
                     egm.Containers = new List<Containers>();
-                    egm.Containers.Add(containers);
+                //    egm.Containers.Add(containers);
                     egmList.Add(identificationSegment.BolReference, egm);
                 }
 
